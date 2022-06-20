@@ -4,10 +4,10 @@ metadata:
   namespace: ocpadmin-devspaces
 projects:
   - name: python-voting-app
-  source:
-    location: 'https://www.github.com/pdfruth/voting-app-python'
-    type: git
-    branch: master
+    source:
+      location: 'https://www.github.com/pdfruth/voting-app-python'
+      type: git
+      branch: master
 components:
   - attributes:
       app.kubernetes.io/name: python
