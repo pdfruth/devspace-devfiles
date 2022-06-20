@@ -6,7 +6,7 @@ projects:
   - name: python-voting-app
     git:
       remotes:
-        origin: "https://www.github.com/pdfruth/voting-app-python.git"
+        origin: "https://github.com/pdfruth/voting-app-py.git"
       checkoutFrom:
         revision: main           
 components:
