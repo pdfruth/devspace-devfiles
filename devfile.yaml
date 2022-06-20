@@ -1,0 +1,57 @@
+schemaVersion: 2.1.0
+metadata:
+  name: python-voting-app
+  namespace: ocpadmin-devspaces
+projects:
+  - name: python-voting-app
+  source:
+    location: 'https://www.github.com/pdfruth/voting-app-python'
+    type: git
+    branch: master
+components:
+  - attributes:
+      app.kubernetes.io/name: python
+      che-theia.eclipse.org/vscode-extensions:
+        - 'relative:extension/resources/github_com/microsoft/vscode-python/releases/download/2020_7_94776/ms-python-release.vsix'
+      che-theia.eclipse.org/vscode-preferences:
+        python.globalModuleInstallation: true
+    container:
+      args:
+        - sh
+        - '-c'
+        - '${PLUGIN_REMOTE_ENDPOINT_EXECUTABLE}'
+      env:
+        - name: PLUGIN_REMOTE_ENDPOINT_EXECUTABLE
+          value: /remote-endpoint/plugin-remote-endpoint
+        - name: THEIA_PLUGINS
+          value: 'local-dir:///plugins/sidecars/python'
+        - name: CHE_DASHBOARD_URL
+          value: 'https://devspaces-openshift-operators.apps.ocp10.internal.net'
+        - name: CHE_PLUGIN_REGISTRY_URL
+          value: 'https://devspaces-openshift-operators.apps.ocp10.internal.net/plugin-registry/v3'
+        - name: CHE_PLUGIN_REGISTRY_INTERNAL_URL
+          value: 'http://plugin-registry.openshift-operators.svc:8080/v3'
+      image: 'registry.redhat.io/devspaces/udi-rhel8@sha256:aed2d0df14feebbc5536c4f66184bb9cdcc7c1177351708467fa64f69c8d6e40'
+      memoryLimit: 2G
+      mountSources: true
+      sourceMapping: /projects
+      volumeMounts:
+        - name: venv
+          path: /home/user/.venv
+        - name: remote-endpoint
+          path: /remote-endpoint
+        - name: plugins
+          path: /plugins
+    name: python
+  - name: venv
+    volume:
+      size: 1G
+commands:
+  - exec:
+      commandLine: python -m venv .venv && . .venv/bin/activate && python hello-world.py
+      component: python
+      group:
+        kind: run
+      label: Run the application
+      workingDir: '${PROJECTS_ROOT}/python-hello-world'
+    id: run
